@@ -16,7 +16,7 @@ int main(int argc, char const *argv[])
     int addrlen = sizeof(address);
     char buffer[102] = {0};
     char *hello = "Hello from server";
-
+    
     printf("execve=0x%p\n", execve);
 
     // Creating socket file descriptor
@@ -55,9 +55,30 @@ int main(int argc, char const *argv[])
         perror("accept");
         exit(EXIT_FAILURE);
     }
-    valread = read( new_socket , buffer, 1024);
-    printf("%s\n",buffer );
-    send(new_socket , hello , strlen(hello) , 0 );
-    printf("Hello message sent\n");
+
+    pid_t processId = fork();
+    
+    if(processId == 0){
+        printf("Child block\n");
+        setuid(65534);
+
+        valread = read( new_socket , buffer, 1024);
+        printf("%s\n",buffer );
+        send(new_socket , hello , strlen(hello) , 0 );
+        printf("Hello message sent\n");
+        exit(0);
+    }
+    else if (processId > 0)
+    {
+
+        int returnStatus;
+        waitpid(processId, &returnStatus, 0);
+
+    }
+    else
+    {
+        perror("Fork failed \n");
+    }
+
     return 0;
 }
