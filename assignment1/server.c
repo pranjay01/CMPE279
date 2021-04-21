@@ -66,23 +66,25 @@ int main(int argc, char const *argv[])
             exit(EXIT_FAILURE);
         }
 
-        valread = read( new_socket , buffer, 1024);
-        printf("%s\n",buffer );
-        send(new_socket , hello , strlen(hello) , 0 );
-        printf("Hello message sent\n");
-        exit(0);
+        // exit(0);
     }
     else if (processId > 0)
     {
 
         int returnStatus;
         waitpid(processId, &returnStatus, 0);
-
+        exit(0);
     }
     else
     {
         perror("Fork failed \n");
     }
 
+
+    valread = read( new_socket , buffer, 1024);
+    printf("%s\n",buffer );
+    send(new_socket , hello , strlen(hello) , 0 );
+    printf("Hello message sent\n");
+        
     return 0;
 }

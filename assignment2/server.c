@@ -18,8 +18,9 @@ int main(int argc, char const *argv[])
     char *hello = "Hello from server";
     
     printf("execve=0x%p\n", execve);
-    printf(" No. of arguments %d \n",argc);
-    if (argc >1)
+    // printf(" No. of arguments %s \n",argv[1]);
+    // if (argv[1] =="CHILD")
+    if(argc>1 && strcmp("CHILD",argv[1])==0)
     {
         printf("Re execution \n");
         goto readv;
@@ -78,9 +79,9 @@ int main(int argc, char const *argv[])
             perror("accept");
             exit(EXIT_FAILURE);
         }
-        char char_socket[20];
-        sprintf(char_socket, "%d", new_socket);
-        char *args[3] = {char_socket, "C", NULL};
+        char socket[20];
+        sprintf(socket, "%d", new_socket);
+        char *args[3] = {socket, "CHILD", NULL};
         execv("./server", args);
         printf("not re executed \n");
         // exit(0);
