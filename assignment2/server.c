@@ -20,7 +20,9 @@ int main(int argc, char const *argv[])
     printf("execve=0x%p\n", execve);
     // printf(" No. of arguments %s \n",argv[1]);
     // if (argv[1] =="CHILD")
-    if(argc>1 && strcmp("CHILD",argv[1])==0)
+    char *envvariable = getenv("isChild");
+    printf(envvariable);
+    if (envvariable && strcmp("true",envvariable)==0 )
     {
         printf("Re execution \n");
         goto readv;
@@ -82,7 +84,11 @@ int main(int argc, char const *argv[])
         char socket[20];
         sprintf(socket, "%d", new_socket);
         char *args[3] = {socket, "CHILD", NULL};
-        execv("./server", args);
+        char *env[] = {"isChild=true",NULL};
+        // setenv("isChild", "true", 1);
+        // setenv("socket", socket, 1);
+        execve("./server", args,env);
+        // execv("./server", args);
         printf("not re executed \n");
         // exit(0);
     }
